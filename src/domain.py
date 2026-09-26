@@ -11,4 +11,10 @@ def load_domain(path: Path) -> dict:
         raise ValueError("领域资料缺少必要字段")
     if not value["facts"] or not value["entities"] or not value["rules"]:
         raise ValueError("领域资料清单不能为空")
+    for key in ("facts", "entities", "rules"):
+        items = value[key]
+        if len(items) != len(set(items)):
+            raise ValueError(f"领域资料清单存在重复条目: {key}")
+    if not isinstance(value["sample"], dict):
+        raise ValueError("领域资料样例必须是对象")
     return value
